@@ -23,7 +23,7 @@ public class BookingServiceTest {
         // Изолированное создание зависимостей перед каждым тестом
         repository = new InMemoryBookingRepository();
         service = new BookingService(repository);
-        guest1 = new Guest("1", "Иван Иванов");
+        guest1 = new Guest("1", "Иван Петров");
         guest2 = new Guest("2", "Петр Петров");
         room = new Room("101", "Люкс 101");
     }
