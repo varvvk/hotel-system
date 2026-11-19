@@ -8,6 +8,7 @@ import model.Room;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import repository.BookingRepository;
+//import java.util.Date;
 
 public class BookingService {
     private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
@@ -18,15 +19,15 @@ public class BookingService {
     }
 
     public Booking bookRoom(String id, Guest guest, Room room, LocalDate checkIn, LocalDate checkOut) {
-        logger.info("Запрос на бронирование номера {} (id={}) с {} по {}",
+        logger.info("Booking request received for room {} (id={}) from {} to {}",
                 room.getRoomNumber(), room.getId(), checkIn, checkOut);
 
         if (checkIn == null || checkOut == null) {
-            logger.error("Ошибка бронирования {}: даты не могут быть пустыми", id);
+            logger.error("Booking {} failed: check-in or check-out date is null", id);
             throw new IllegalArgumentException("Даты не могут быть пустыми");
         }
         if (!checkOut.isAfter(checkIn)) {
-            logger.error("Ошибка бронирования {}: дата выезда ({}) должна быть позже заезда ({})",
+            logger.error("Booking {} failed: check-out date ({}) must be after check-in date ({})",
                     id, checkOut, checkIn);
             throw new IllegalArgumentException("Дата выезда должна быть позже даты заезда");
         }
@@ -36,7 +37,7 @@ public class BookingService {
             boolean overlaps = !checkIn.isAfter(existing.getCheckOutDate())
                     && !checkOut.isBefore(existing.getCheckInDate());
             if (overlaps) {
-                logger.warn("Номер {} уже забронирован на период с {} по {}",
+                logger.warn("Room {} is already booked from {} to {}",
                         room.getRoomNumber(), existing.getCheckInDate(), existing.getCheckOutDate());
                 throw new IllegalStateException("Номер " + room.getRoomNumber()
                         + " уже забронирован на указанный период c "
@@ -46,7 +47,7 @@ public class BookingService {
 
         Booking newBooking = new Booking(id, guest, room, checkIn, checkOut);
         repository.save(newBooking);
-        logger.info("Бронирование {} для номера {} успешно создано", id, room.getRoomNumber());
+        logger.info("Booking {} for room {} created successfully", id, room.getRoomNumber());
         return newBooking;
     }
 }
