@@ -8,7 +8,6 @@ import model.Room;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import repository.BookingRepository;
-import java.util.Date;
 
 public class BookingService {
     private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
